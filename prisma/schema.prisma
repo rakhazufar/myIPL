@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Perumahan {
+  id_perumahan Int     @id @default(autoincrement())
+  nama         String  @db.VarChar(100)
+  alamat       String  @db.VarChar(255)
+  clusters     Cluster[]
+}
+
+model Cluster {
+  id_cluster  Int     @id @default(autoincrement())
+  id_perumahan Int
+  nama        String  @db.VarChar(100)
+  id_pengelola Int
+  perumahan   Perumahan @relation(fields: [id_perumahan], references: [id_perumahan])
+  pengelola   Admin     @relation(fields: [id_pengelola], references: [id_admin])
+  users       User[]
+}
+
+model User {
+  id_user       Int     @id @default(autoincrement())
+  id_cluster    Int
+  nama          String  @db.VarChar(100)
+  email         String  @unique @db.VarChar(100)
+  password      String  @db.VarChar(100)
+  alamat        String  @db.VarChar(255)
+  nomor_telepon String  @db.VarChar(15)
+  cluster       Cluster @relation(fields: [id_cluster], references: [id_cluster])
+  tagihans      Tagihan[]
+}
+
+model Admin {
+  id_admin      Int     @id @default(autoincrement())
+  nama          String  @db.VarChar(100)
+  email         String  @unique @db.VarChar(100)
+  password      String  @db.VarChar(100)
+  nomor_telepon String  @db.VarChar(15)
+  id_role       Int
+  role          Role    @relation(fields: [id_role], references: [id_role])
+  clusters      Cluster[]
+}
+
+model Role {
+  id_role Int     @id @default(autoincrement())
+  nama    String  @db.VarChar(50)
+  admins  Admin[]
+}
+
+model StatusTagihan {
+  id_status Int     @id @default(autoincrement())
+  nama      String  @db.VarChar(50)
+  tagihans  Tagihan[]
+}
+
+model Tagihan {
+  id_tagihan Int         @id @default(autoincrement())
+  id_user    Int
+  jumlah     Float
+  tanggal    DateTime
+  id_status  Int
+  user       User        @relation(fields: [id_user], references: [id_user])
+  status     StatusTagihan @relation(fields: [id_status], references: [id_status])
+  pembayarans Pembayaran[]
+}
+
+model Pembayaran {
+  id_pembayaran  Int     @id @default(autoincrement())
+  id_tagihan     Int
+  tanggal        DateTime
+  jumlah         Float
+  metode_pembayaran String @db.VarChar(50)
+  tagihan        Tagihan @relation(fields: [id_tagihan], references: [id_tagihan])
+}
