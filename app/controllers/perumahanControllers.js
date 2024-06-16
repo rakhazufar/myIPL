@@ -1,10 +1,6 @@
 const PerumahanService = require("../services/perumahanServices");
 
 class PerumahanControllers {
-  constructor(PerumahanControllers) {
-    this.PerumahanControllers = PerumahanControllers;
-  }
-
   handleListPerumahan = async (req, res) => {
     try {
       const listPerumahan = await PerumahanService.getList(req.prisma);

@@ -1,22 +1,27 @@
 class PerumahanRepository {
-  constructor(PerumahanRepository) {
-    this.PerumahanRepository = PerumahanRepository;
-  }
-
   async create(prisma, { nama, alamat }) {
-    const perumahan = await prisma.perumahan.create({
-      data: {
-        nama: nama,
-        alamat: alamat,
-      },
-    });
-
-    return perumahan;
+    try {
+      const perumahan = await prisma.perumahan.create({
+        data: {
+          nama: nama,
+          alamat: alamat,
+        },
+      });
+      return perumahan;
+    } catch (error) {
+      console.error("Error creating perumahan:", error);
+      throw new Error("Failed to create perumahan");
+    }
   }
 
   async getList(prisma) {
-    const perumahan = await prisma.perumahan.findMany();
-    return perumahan;
+    try {
+      const perumahan = await prisma.perumahan.findMany();
+      return perumahan;
+    } catch (error) {
+      console.error("Error retrieving perumahan list:", error);
+      throw new Error("Failed to retrieve perumahan list");
+    }
   }
 }
 

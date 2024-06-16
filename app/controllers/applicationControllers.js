@@ -1,8 +1,4 @@
 class ApplicationControllers {
-  constructor(ApplicationControllers) {
-    this.ApplicationControllers = ApplicationControllers;
-  }
-
   handleGetRoot = (req, res) => {
     res.status(200).json({
       status: "OK",

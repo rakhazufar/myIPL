@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const { prismaMiddleware } = require("../middleware/prismaMiddleware");
+const { prismaMiddleware } = require("../middleware/prisma");
 
 const router = require("./router");
 
