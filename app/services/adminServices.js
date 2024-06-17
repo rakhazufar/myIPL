@@ -24,6 +24,12 @@ class AdminService {
   };
 
   createAdmin = async ({ prisma, reqBody, response }) => {
+    const adminRole = reqBody.admin.id_role;
+
+    if (adminRole != 1) {
+      throw new Error("Not Authorized");
+    }
+
     const { nama, email, password, nomor_telepon, id_role } = reqBody;
 
     try {
