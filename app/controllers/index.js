@@ -3,6 +3,8 @@ const { PerumahanControllers } = require("./perumahanControllers");
 const { AdminControllers } = require("./adminControllers");
 const { ExcelControllers } = require("./excelControllers");
 const { ClusterControllers } = require("./clusterControllers");
+const { UserControllers } = require("./userControllers");
+const { TagihanControllers } = require("./tagihanControllers");
 
 module.exports = {
   ApplicationControllers,
@@ -10,4 +12,6 @@ module.exports = {
   AdminControllers,
   ExcelControllers,
   ClusterControllers,
+  UserControllers,
+  TagihanControllers,
 };

@@ -18,17 +18,42 @@ async function main() {
     },
   });
 
+  const unpaid = await prisma.statusTagihan.create({
+    data: {
+      nama: "Unpaid",
+    },
+  });
+
+  const pending = await prisma.statusTagihan.create({
+    data: {
+      nama: "Pending",
+    },
+  });
+
+  const paid = await prisma.statusTagihan.create({
+    data: {
+      nama: "Paid",
+    },
+  });
+
   const administrator = await prisma.admin.create({
     data: {
       nama: "dhayu",
       email: "dhayuserver@gmail.com",
       password: hashedPassword,
       nomor_telepon: "089639143290",
-      id_role: 1,
+      role_id: 1,
     },
   });
 
-  console.log({ adminsitrator, pengelolaCluster, administrator });
+  console.log({
+    adminsitrator,
+    pengelolaCluster,
+    administrator,
+    paid,
+    unpaid,
+    pending,
+  });
 }
 
 main()

@@ -4,6 +4,8 @@ const {
   AdminControllers,
   ExcelControllers,
   ClusterControllers,
+  UserControllers,
+  TagihanControllers,
 } = require("./controllers");
 const { checkAccessToken: auth } = require("../middleware/auth");
 const multer = require("multer");
@@ -16,6 +18,8 @@ function apply(app) {
   const adminControllers = new AdminControllers();
   const excelControllers = new ExcelControllers();
   const clusterControllers = new ClusterControllers();
+  const userControllers = new UserControllers();
+  const tagihanControllers = new TagihanControllers();
 
   app.get("/", applicationControllers.handleGetRoot);
 
@@ -29,9 +33,20 @@ function apply(app) {
 
   //CLUSTER
   app.post("/api/cluster", auth, clusterControllers.create);
+  app.get("/api/clusters", clusterControllers.get);
+
+  //TAGIHAN
+  app.post("/api/tagihan", auth, tagihanControllers.create);
+  app.get("/api/tagihan", tagihanControllers.get);
 
   //USERS
-  app.post("/upload-users", upload.single("file"), excelControllers.handleFile);
+  app.post(
+    "/upload-users",
+    auth,
+    upload.single("file"),
+    excelControllers.handleFile
+  );
+  app.get("/api/users", auth, userControllers.get);
 
   return app;
 }

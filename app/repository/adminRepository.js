@@ -35,7 +35,7 @@ class AdminRepository {
   //bikin create admin
   createAdmin = async (
     prisma,
-    { nama, email, password, nomor_telepon, id_role }
+    { nama, email, password, nomor_telepon, role_id }
   ) => {
     try {
       const hashedPassword = await hashPassword({ passwordString: password });
@@ -45,7 +45,7 @@ class AdminRepository {
           email,
           password: hashedPassword,
           nomor_telepon,
-          id_role,
+          role_id,
         },
       });
 

@@ -5,18 +5,16 @@ class AdminControllers extends ApplicationControllers {
   handleLogin = async (req, res) => {
     try {
       const reqBody = req.body;
-
       const accessToken = await AdminService.login({
         prisma: req.prisma,
         reqBody,
-        response: res,
       });
 
       return res
         .status(200)
         .json({ message: "success", accessToken: accessToken });
     } catch (error) {
-      return res.status(500).json({ message: "error", error });
+      return res.status(500).json({ success: false, message: error.message });
     }
   };
 

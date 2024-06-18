@@ -26,7 +26,7 @@ class ExcelService {
             throw new Error("Data dalam file tidak lengkap");
           }
           users.push({
-            id_cluster: parseInt(cluster),
+            cluster_id: parseInt(cluster),
             nama: nama,
             alamat: address,
             nomor_telepon: phoneNumber,

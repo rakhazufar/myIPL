@@ -15,8 +15,18 @@ class ExcelRepository {
 
       return result;
     } catch (error) {
-      console.error("Error creating user:", error);
-      throw new Error(`Failed to create users: ${error}`);
+      if (error.code === "P2002") {
+        console.log(
+          "Unique constraint failed on the fields:",
+          error.meta.target
+        );
+        throw new Error(
+          `Unique constraint failed on the fields: ${error.meta.target}`
+        );
+      } else {
+        console.log("Error create users:", error.message);
+        throw new Error("Error create users:", error.message);
+      }
     }
   };
 }
