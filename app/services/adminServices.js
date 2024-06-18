@@ -2,21 +2,19 @@ const { verifyPassword } = require("../../libs/bcrypt");
 const { createToken } = require("../../libs/token");
 const AdminRepository = require("../repository/adminRepository");
 class AdminService {
-  login = async ({ prisma, reqBody, response }) => {
+  login = async ({ prisma, reqBody }) => {
     const email = reqBody.email;
     const password = reqBody.password;
     const admin = await AdminRepository.findbyName({ prisma, email });
 
     if (!admin) {
-      return response
-        .status(403)
-        .json({ message: "admin password or username not found" });
+      throw new Error("admin password or username not found");
     }
 
     const isPasswordCorrect = verifyPassword(password, admin.password);
 
     if (!isPasswordCorrect) {
-      return response.status(401).json({ message: "password incorrect" });
+      throw new Error("password incorrect");
     }
 
     const accessToken = createToken(admin);
@@ -24,7 +22,14 @@ class AdminService {
   };
 
   createAdmin = async ({ prisma, reqBody, response }) => {
-    const { nama, email, password, nomor_telepon, id_role } = reqBody;
+    const adminRole = reqBody.admin.role_id;
+    console.log(reqBody);
+
+    if (adminRole != 1) {
+      throw new Error("Not Authorized");
+    }
+
+    const { nama, email, password, nomor_telepon, role_id } = reqBody;
 
     try {
       const newAdmin = await AdminRepository.createAdmin(prisma, {
@@ -32,7 +37,7 @@ class AdminService {
         email,
         password,
         nomor_telepon,
-        id_role,
+        role_id,
       });
 
       if (!newAdmin) {

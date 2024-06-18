@@ -15,71 +15,83 @@ datasource db {
 
 
 model Perumahan {
-  id_perumahan Int     @id @default(autoincrement())
-  nama         String  @db.VarChar(100)
-  alamat       String  @db.VarChar(255)
-  clusters     Cluster[]
+  id         Int     @id @default(autoincrement())
+  nama       String  @db.VarChar(100)
+  alamat     String  @db.VarChar(255)
+  created_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  clusters   Cluster[]
 }
 
 model Cluster {
-  id_cluster  Int     @id @default(autoincrement())
-  id_perumahan Int
-  nama        String  @db.VarChar(100)
-  id_pengelola Int
-  perumahan   Perumahan @relation(fields: [id_perumahan], references: [id_perumahan])
-  pengelola   Admin     @relation(fields: [id_pengelola], references: [id_admin])
-  users       User[]
+  id           Int     @id @default(autoincrement())
+  perumahan_id Int
+  nama         String  @db.VarChar(100)
+  pengelola_id Int
+  perumahan    Perumahan @relation(fields: [perumahan_id], references: [id])
+  pengelola    Admin     @relation(fields: [pengelola_id], references: [id])
+  created_at   DateTime  @default(now())
+  deleted_at   DateTime?
+
+  users        User[]
 }
 
 model User {
-  id_user       Int     @id @default(autoincrement())
-  id_cluster    Int
+  id            Int     @id @default(autoincrement())
+  cluster_id    Int
   nama          String  @db.VarChar(100)
   alamat        String  @db.VarChar(255)
-  nomor_telepon String  @db.VarChar(15)
-  cluster       Cluster @relation(fields: [id_cluster], references: [id_cluster])
+  nomor_telepon String  @db.VarChar(15) @unique
+  created_at    DateTime  @default(now())
+  deleted_at    DateTime?
+  cluster       Cluster @relation(fields: [cluster_id], references: [id])
   tagihans      Tagihan[]
 }
 
 model Admin {
-  id_admin      Int     @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   nama          String  @db.VarChar(100)
   email         String  @unique @db.VarChar(100)
   password      String  @db.VarChar(100)
   nomor_telepon String  @db.VarChar(15)
-  id_role       Int
-  role          Role    @relation(fields: [id_role], references: [id_role])
+  role_id       Int
+  created_at    DateTime  @default(now())
+  deleted_at    DateTime?
+  role          Role    @relation(fields: [role_id], references: [id])
   clusters      Cluster[]
 }
 
 model Role {
-  id_role Int     @id @default(autoincrement())
-  nama    String  @db.VarChar(50)
-  admins  Admin[]
+  id     Int     @id @default(autoincrement())
+  nama   String  @db.VarChar(50)
+  admins Admin[]
 }
 
 model StatusTagihan {
-  id_status Int     @id @default(autoincrement())
-  nama      String  @db.VarChar(50)
-  tagihans  Tagihan[]
+  id       Int     @id @default(autoincrement())
+  nama     String  @db.VarChar(50)
+  tagihans Tagihan[]
 }
 
 model Tagihan {
-  id_tagihan Int         @id @default(autoincrement())
-  id_user    Int
-  jumlah     Float
-  tanggal    DateTime
-  id_status  Int
-  user       User        @relation(fields: [id_user], references: [id_user])
-  status     StatusTagihan @relation(fields: [id_status], references: [id_status])
-  pembayarans Pembayaran[]
+  id            Int         @id @default(autoincrement())
+  user_id       Int
+  jumlah        Float
+  status_id     Int
+  created_at    DateTime  @default(now())
+  deleted_at    DateTime?
+  user          User        @relation(fields: [user_id], references: [id])
+  status        StatusTagihan @relation(fields: [status_id], references: [id])
+  pembayarans   Pembayaran[]
 }
 
 model Pembayaran {
-  id_pembayaran  Int     @id @default(autoincrement())
-  id_tagihan     Int
-  tanggal        DateTime
-  jumlah         Float
+  id               Int     @id @default(autoincrement())
+  tagihan_id       Int
+  jumlah           Float
+  created_at       DateTime  @default(now())
+  deleted_at       DateTime?
   metode_pembayaran String @db.VarChar(50)
-  tagihan        Tagihan @relation(fields: [id_tagihan], references: [id_tagihan])
+  tagihan          Tagihan @relation(fields: [tagihan_id], references: [id])
 }
