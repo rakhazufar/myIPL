@@ -1,22 +1,40 @@
-const { decodeToken } = require("../libs/token");
-const AdminRepository = require("../app/repository/adminRepository");
+const { decodeToken } = require('../libs/token');
+const AdminRepository = require('../app/repository/adminRepository');
 
 const checkAccessToken = async (req, res, next) => {
-  const tokenBearer = req.headers.authorization;
-  const token = tokenBearer?.split("Bearer ")[1];
+  const accessToken = req.cookies.accessToken;
 
-  if (!token) {
-    return res.status(401).json({ message: "token not found" });
+  if (!accessToken) {
+    return res
+      .status(401)
+      .json({
+        success: false,
+        message: 'Token tidak ditemukan',
+        errorCode: 'TOKEN_NOT_FOUND',
+      });
   }
 
   try {
-    const decoded = decodeToken(token);
+    const decoded = decodeToken(accessToken);
     req.body.admin = await AdminRepository.findAdminWithoutPassword({
-      email: decoded.user.email,
+      email: decoded.data.email,
     });
+
     next();
   } catch (error) {
-    return res.status(400).json(error);
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        success: false,
+        message: 'Token kedaluwarsa',
+        errorCode: 'TOKEN_EXPIRED',
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: 'Token tidak valid',
+        errorCode: 'INVALID_TOKEN',
+      });
+    }
   }
 };
 

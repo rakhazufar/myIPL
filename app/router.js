@@ -6,11 +6,11 @@ const {
   ClusterControllers,
   UserControllers,
   TagihanControllers,
-} = require("./controllers");
-const { checkAccessToken: auth } = require("../middleware/auth");
-const multer = require("multer");
+} = require('./controllers');
+const { checkAccessToken: auth } = require('../middleware/auth');
+const multer = require('multer');
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: 'uploads/' });
 
 function apply(app) {
   const applicationControllers = new ApplicationControllers();
@@ -21,32 +21,33 @@ function apply(app) {
   const userControllers = new UserControllers();
   const tagihanControllers = new TagihanControllers();
 
-  app.get("/", applicationControllers.handleGetRoot);
+  app.get('/', applicationControllers.handleGetRoot);
 
   //AUTH
-  app.post("/api/login", adminControllers.handleLogin);
-  app.post("/api/create", auth, adminControllers.handleCreateAdmin);
+  app.post('/api/login', adminControllers.handleLogin);
+  app.post('/api/create', auth, adminControllers.handleCreateAdmin);
+  app.post('/token', adminControllers.handleRefreshToken);
 
   //PERUMAHAN
-  app.get("/api/perumahan", perumahanControllers.handleListPerumahan);
-  app.post("/api/perumahan", auth, perumahanControllers.handleCreatePerumahan);
+  app.get('/api/perumahan', perumahanControllers.handleListPerumahan);
+  app.post('/api/perumahan', auth, perumahanControllers.handleCreatePerumahan);
 
   //CLUSTER
-  app.post("/api/cluster", auth, clusterControllers.create);
-  app.get("/api/clusters", clusterControllers.get);
+  app.post('/api/cluster', auth, clusterControllers.create);
+  app.get('/api/clusters', clusterControllers.get);
 
   //TAGIHAN
-  app.post("/api/tagihan", auth, tagihanControllers.create);
-  app.get("/api/tagihan", tagihanControllers.get);
+  app.post('/api/tagihan', auth, tagihanControllers.create);
+  app.get('/api/tagihan', tagihanControllers.get);
 
   //USERS
   app.post(
-    "/upload-users",
+    '/upload-users',
     auth,
-    upload.single("file"),
+    upload.single('file'),
     excelControllers.handleFile
   );
-  app.get("/api/users", auth, userControllers.get);
+  app.get('/api/users', auth, userControllers.get);
 
   return app;
 }
