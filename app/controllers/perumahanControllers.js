@@ -12,8 +12,10 @@ class PerumahanControllers {
 
   handleCreatePerumahan = async (req, res) => {
     try {
+      console.log("sampai sini")
       const reqBody = req.body;
       const perumahan = await PerumahanService.create(req.prisma, reqBody);
+      console.log(perumahan)
       res.status(201).json({ success: true, data: perumahan });
     } catch (error) {
       res.status(500).json({ error: error.message });
