@@ -77,6 +77,23 @@ class AdminControllers extends ApplicationControllers {
       }
     }
   };
+
+  handleWhoIAm = (req, res) => {
+    try {
+      const reqBody = req.body.admin;
+      res.status(200).json({
+        success: true,
+        message: 'Sukses Mengambil Data Admin',
+        data: reqBody,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Terjadi kesalahan',
+        errorCode: 'INTERNAL_SERVER_ERROR',
+      });
+    }
+  };
 }
 
 module.exports = { AdminControllers };

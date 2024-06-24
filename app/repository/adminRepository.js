@@ -1,6 +1,6 @@
-const { prisma: prism } = require("../../db/prisma");
-const { exclude } = require("../../libs/prisma");
-const { hashPassword } = require("../../libs/bcrypt");
+const { prisma: prism } = require('../../db/prisma');
+const { exclude } = require('../../libs/prisma');
+const { hashPassword } = require('../../libs/bcrypt');
 class AdminRepository {
   findbyName = async ({ prisma, email }) => {
     try {
@@ -11,7 +11,7 @@ class AdminRepository {
       });
       return admin;
     } catch (error) {
-      console.error("Error finding admin:", error);
+      console.error('Error finding admin:', error);
       throw error;
     }
   };
@@ -22,12 +22,15 @@ class AdminRepository {
         where: {
           email: email,
         },
+        include: {
+          role: true,
+        },
       });
 
-      const adminwithoutPassword = exclude(admin, ["password"]);
+      const adminwithoutPassword = exclude(admin, ['password']);
       return adminwithoutPassword;
     } catch (error) {
-      console.error("Error finding admin:", error);
+      console.error('Error finding admin:', error);
       throw error;
     }
   };
@@ -51,8 +54,8 @@ class AdminRepository {
 
       return newAdmin;
     } catch (error) {
-      console.error("Database error:", error);
-      throw new Error("Database operation failed");
+      console.error('Database error:', error);
+      throw new Error('Database operation failed');
     }
   };
 }

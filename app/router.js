@@ -6,6 +6,7 @@ const {
   ClusterControllers,
   UserControllers,
   TagihanControllers,
+  RolesControllers,
 } = require('./controllers');
 const { checkAccessToken: auth } = require('../middleware/auth');
 const multer = require('multer');
@@ -20,6 +21,7 @@ function apply(app) {
   const clusterControllers = new ClusterControllers();
   const userControllers = new UserControllers();
   const tagihanControllers = new TagihanControllers();
+  const rolesControllers = new RolesControllers();
 
   app.get('/', applicationControllers.handleGetRoot);
 
@@ -27,6 +29,11 @@ function apply(app) {
   app.post('/api/login', adminControllers.handleLogin);
   app.post('/api/create', auth, adminControllers.handleCreateAdmin);
   app.post('/token', adminControllers.handleRefreshToken);
+  app.get('/api/whoiam', auth, adminControllers.handleWhoIAm);
+
+  // Role
+  app.get('/api/roles', auth, rolesControllers.getRoles);
+  app.post('/api/roles', auth, rolesControllers.createRoles);
 
   //PERUMAHAN
   app.get('/api/perumahan', perumahanControllers.handleListPerumahan);
@@ -38,8 +45,8 @@ function apply(app) {
 
   //TAGIHAN
   app.post('/api/tagihan', auth, tagihanControllers.create);
-  app.get('/api/tagihan', tagihanControllers.get);
-
+  app.get('/api/tagihan', auth, tagihanControllers.get);
+  // app.get("/api/tagihan/user", tagihanControllers)
   //USERS
   app.post(
     '/upload-users',

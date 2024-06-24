@@ -5,13 +5,11 @@ const checkAccessToken = async (req, res, next) => {
   const accessToken = req.cookies.accessToken;
 
   if (!accessToken) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        message: 'Token tidak ditemukan',
-        errorCode: 'TOKEN_NOT_FOUND',
-      });
+    return res.status(401).json({
+      success: false,
+      message: 'Token tidak ditemukan',
+      errorCode: 'TOKEN_NOT_FOUND',
+    });
   }
 
   try {
