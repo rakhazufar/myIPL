@@ -7,6 +7,7 @@ const {
   UserControllers,
   TagihanControllers,
   RolesControllers,
+  TransactionControllers,
 } = require('./controllers');
 const { checkAccessToken: auth } = require('../middleware/auth');
 const multer = require('multer');
@@ -22,6 +23,7 @@ function apply(app) {
   const userControllers = new UserControllers();
   const tagihanControllers = new TagihanControllers();
   const rolesControllers = new RolesControllers();
+  const transactionControllers = new TransactionControllers();
 
   app.get('/', applicationControllers.handleGetRoot);
 
@@ -46,7 +48,19 @@ function apply(app) {
   //TAGIHAN
   app.post('/api/tagihan', auth, tagihanControllers.create);
   app.get('/api/tagihan', auth, tagihanControllers.get);
-  // app.get("/api/tagihan/user", tagihanControllers)
+  app.get('/api/tagihan/user', tagihanControllers.getByNomorTlp);
+
+  //TRANSAKSI
+  app.post('/api/transaction', transactionControllers.create);
+  app.post(
+    '/api/transaction/channel-pembayaran',
+    transactionControllers.getChannelPembayaran
+  );
+  app.post(
+    '/api/transaction/detail',
+    transactionControllers.getDetailTransaksi
+  );
+
   //USERS
   app.post(
     '/upload-users',

@@ -6,6 +6,7 @@ const { ClusterControllers } = require('./clusterControllers');
 const { UserControllers } = require('./userControllers');
 const { TagihanControllers } = require('./tagihanControllers');
 const { RolesControllers } = require('./rolesControllers');
+const { TransactionControllers } = require('./transactionControllers');
 
 module.exports = {
   ApplicationControllers,
@@ -16,4 +17,5 @@ module.exports = {
   UserControllers,
   TagihanControllers,
   RolesControllers,
+  TransactionControllers,
 };

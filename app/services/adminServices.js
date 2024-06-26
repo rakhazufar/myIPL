@@ -2,7 +2,6 @@ const { verifyPassword } = require('../../libs/bcrypt');
 const { createAccessToken, createRefreshToken } = require('../../libs/token');
 const AdminRepository = require('../repository/adminRepository');
 const { decodeRefreshToken } = require('../../libs/token');
-const adminRepository = require('../repository/adminRepository');
 class AdminService {
   login = async ({ prisma, reqBody }) => {
     const email = reqBody.email;

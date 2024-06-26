@@ -43,10 +43,12 @@ model User {
   nama          String  @db.VarChar(100)
   alamat        String  @db.VarChar(255)
   nomor_telepon String  @db.VarChar(15) @unique
+  email         String  @db.VarChar(25) @unique
   created_at    DateTime  @default(now())
   deleted_at    DateTime?
   cluster       Cluster @relation(fields: [cluster_id], references: [id])
   tagihans      Tagihan[]
+  transaksi     Transaksi[]
 }
 
 model Admin {
@@ -77,21 +79,20 @@ model StatusTagihan {
 model Tagihan {
   id            Int         @id @default(autoincrement())
   user_id       Int
+  nama          String
   jumlah        Float
   status_id     Int
   created_at    DateTime  @default(now())
   deleted_at    DateTime?
   user          User        @relation(fields: [user_id], references: [id])
   status        StatusTagihan @relation(fields: [status_id], references: [id])
-  pembayarans   Pembayaran[]
 }
 
-model Pembayaran {
-  id               Int     @id @default(autoincrement())
-  tagihan_id       Int
-  jumlah           Float
-  created_at       DateTime  @default(now())
-  deleted_at       DateTime?
-  metode_pembayaran String @db.VarChar(50)
-  tagihan          Tagihan @relation(fields: [tagihan_id], references: [id])
+model Transaksi {
+  id            Int       @id @default(autoincrement())
+  user_id       Int
+  reference     String
+  created_at    DateTime  @default(now())
+  deleted_at    DateTime?
+  user          User        @relation(fields: [user_id], references: [id])
 }
