@@ -26,19 +26,20 @@ class TransactionControllers extends ApplicationControllers {
         nomor_telepon,
       });
 
-      const { data, reference } = await transactionServices.createTransaction({
-        prisma: req.prisma,
-        data: {
-          signature,
-          invoice: inv,
-          method,
-          total,
-          user,
-          tagihan,
-        },
-      });
+      const { data, reference, newTagihan } =
+        await transactionServices.createTransaction({
+          prisma: req.prisma,
+          data: {
+            signature,
+            invoice: inv,
+            method,
+            total,
+            user,
+            tagihan,
+          },
+        });
 
-      res.status(200).json({ data: data.data, reference });
+      res.status(200).json({ data: data.data, reference, newTagihan });
     } catch (error) {
       return res
         .status(500)
@@ -69,9 +70,11 @@ class TransactionControllers extends ApplicationControllers {
 
   getDetailTransaksi = async (req, res) => {
     try {
-      const { reference } = req.body;
+      const { nomor_telepon } = req.body;
+      const prisma = req.prisma;
       const data = await transactionServices.getDetailTransaction({
-        reference,
+        nomor_telepon,
+        prisma,
       });
 
       res.status(200).json(data);

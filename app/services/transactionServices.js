@@ -35,6 +35,7 @@ class TransactionService {
         customer_email: user.email,
         customer_phone: user.nomor_telepon,
         order_items: tagihan.map((x) => ({
+          tagihanId: x.id,
           name: x.nama,
           price: x.jumlah,
           quantity: 1,
@@ -43,13 +44,14 @@ class TransactionService {
         expired_time: expiry,
         signature: signature,
       };
-      const { data, reference } = await TransactionRepository.create({
-        prisma,
-        payload,
-        userId: user.id,
-      });
+      const { data, reference, newTagihan } =
+        await TransactionRepository.create({
+          prisma,
+          payload,
+          userId: user.id,
+        });
 
-      return { data, reference };
+      return { data, reference, newTagihan };
     } catch (error) {
       console.error('Service error:', error);
       throw new Error(`Service operation failed: ${error.message}`);
@@ -94,10 +96,13 @@ class TransactionService {
     }
   }
 
-  async getDetailTransaction({ reference }) {
+  async getDetailTransaction({ nomor_telepon, prisma }) {
     try {
       const detailTransaction =
-        await transactionRepository.getDetailTransaction({ reference });
+        await transactionRepository.getDetailTransaction({
+          nomor_telepon,
+          prisma,
+        });
       return detailTransaction.data;
     } catch (error) {
       console.log(error);

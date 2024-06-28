@@ -1,6 +1,6 @@
-const { prisma } = require("./prisma");
-const { hashPassword } = require("../libs/bcrypt");
-require("dotenv").config();
+const { prisma } = require('./prisma');
+const { hashPassword } = require('../libs/bcrypt');
+require('dotenv').config();
 
 async function main() {
   const passwordString = process.env.PASSWORD_STRING_ADMIN;
@@ -8,40 +8,40 @@ async function main() {
 
   const adminsitrator = await prisma.role.create({
     data: {
-      nama: "Administrator",
+      nama: 'Administrator',
     },
   });
 
   const pengelolaCluster = await prisma.role.create({
     data: {
-      nama: "Pengelola Cluster",
+      nama: 'Pengelola Cluster',
     },
   });
 
   const unpaid = await prisma.statusTagihan.create({
     data: {
-      nama: "Unpaid",
+      nama: 'Unpaid',
     },
   });
 
   const pending = await prisma.statusTagihan.create({
     data: {
-      nama: "Pending",
+      nama: 'Pending',
     },
   });
 
   const paid = await prisma.statusTagihan.create({
     data: {
-      nama: "Paid",
+      nama: 'Paid',
     },
   });
 
   const administrator = await prisma.admin.create({
     data: {
-      nama: "dhayu",
-      email: "dhayuserver@gmail.com",
+      nama: 'dhayu',
+      email: 'dhayuserver@gmail.com',
       password: hashedPassword,
-      nomor_telepon: "089639143290",
+      nomor_telepon: '089639143290',
       role_id: 1,
     },
   });

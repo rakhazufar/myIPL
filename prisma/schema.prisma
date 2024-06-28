@@ -92,6 +92,8 @@ model Transaksi {
   id            Int       @id @default(autoincrement())
   user_id       Int
   reference     String
+  status        String
+  expired       DateTime
   created_at    DateTime  @default(now())
   deleted_at    DateTime?
   user          User        @relation(fields: [user_id], references: [id])
